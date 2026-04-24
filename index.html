@@ -83,8 +83,10 @@
 
     /* HERO — full-bleed video with overlaid content */
     .hero { position: relative; min-height: max(680px, 92vh); display: flex; align-items: center; justify-content: center; padding: calc(var(--nav-h) + 48px) 0 88px; overflow: hidden; background: #15120f; color: var(--white); isolation: isolate; }
-    .hero-media { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+    .hero-media { position: absolute; inset: 0; z-index: 0; overflow: hidden; background: radial-gradient(ellipse at 50% 40%, #2a241e 0%, #15120f 70%); }
     .hero-media .hero-video, .hero-media .hero-fallback { position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translate(-50%, -50%); object-fit: cover; }
+    .hero-media .hero-video { opacity: 0; transition: opacity .6s ease; }
+    .hero-media .hero-video.is-ready { opacity: 1; }
     .hero-media .hero-fallback { display: none; }
     .hero-scrim { position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,.25) 35%, rgba(0,0,0,.25) 60%, rgba(0,0,0,.65) 100%); }
     .hero-content { position: relative; z-index: 2; width: 100%; text-align: center; animation: fadeIn .8s .2s both; }
@@ -308,11 +310,10 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero-media" aria-hidden="true">
-      <video class="hero-video" autoplay muted loop playsinline preload="metadata"
-             poster="https://images.pexels.com/videos/7578540/pictures/preview-0.jpg">
+      <video class="hero-video" id="hero-video" autoplay muted loop playsinline preload="auto">
         <source src="https://res.cloudinary.com/dslnturnw/video/upload/v1777057675/7578540-hd_1280_720_30fps_zdmcgj.mp4" type="video/mp4" />
       </video>
-      <img class="hero-fallback" src="https://images.pexels.com/videos/7578540/pictures/preview-0.jpg" alt="" decoding="async" />
+      <img class="hero-fallback" src="https://res.cloudinary.com/dslnturnw/video/upload/so_0,q_auto,f_auto,w_1600/v1777057675/7578540-hd_1280_720_30fps_zdmcgj.jpg" alt="" decoding="async" />
       <div class="hero-scrim"></div>
     </div>
     <div class="hero-content">
@@ -552,6 +553,15 @@
   <script>
     const nav = document.getElementById('nav');
     window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 10); });
+
+    // Fade hero video in only once it's actually playing to avoid a grainy/frozen first frame
+    const heroVideo = document.getElementById('hero-video');
+    if (heroVideo) {
+      const revealVideo = () => heroVideo.classList.add('is-ready');
+      if (heroVideo.readyState >= 3 && !heroVideo.paused) revealVideo();
+      heroVideo.addEventListener('playing', revealVideo, { once: true });
+      heroVideo.addEventListener('canplaythrough', revealVideo, { once: true });
+    }
 
     // Mobile nav toggle
     const navToggle = document.getElementById('nav-toggle');
