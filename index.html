@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>REVO — Renovate Your Reality</title>
+  <meta name="description" content="Scan real furniture, place it in your room in 3D, and shop with total confidence. REVO is the spatial renovation marketplace." />
+  <meta name="theme-color" content="#2C2926" />
+  <link rel="canonical" href="https://revo.app/" />
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="REVO — Renovate Your Reality" />
+  <meta property="og:description" content="Scan real furniture, place it in your room in 3D, and shop with total confidence." />
+  <meta property="og:url" content="https://revo.app/" />
+  <meta property="og:image" content="https://revo.app/og.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="REVO — Renovate Your Reality" />
+  <meta name="twitter:description" content="Scan real furniture, place it in your room in 3D, and shop with total confidence." />
+  <meta name="twitter:image" content="https://revo.app/og.jpg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    :root {
+      --primary: #2C2926; --on-primary: #ffffff; --surface: #F5F4F0;
+      --surface-low: #EFEEEA; --surface-warm: #F3F3EF;
+      --on-surface: #2C2926; --on-surface-var: #8A857F;
+      --accent: #D4A574; --white: #ffffff;
+      --font-serif: 'DM Serif Display', Georgia, serif;
+      --font-sans: 'DM Sans', system-ui, sans-serif;
+      --pad: 64px; --section-gap: 120px; --max-w: 1200px; --nav-h: 72px;
+    }
+    @media (max-width: 768px) {
+      :root { --pad: 20px; --section-gap: 80px; --nav-h: 64px; }
+    }
+    body { font-family: var(--font-sans); background: var(--white); color: var(--on-surface); line-height: 1.6; }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    button { font-family: inherit; cursor: pointer; border: none; }
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 var(--pad); }
+
+    /* Scroll animations */
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+    .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+    .reveal-right.visible { opacity: 1; transform: translateX(0); }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* NAV */
+    .nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index: 100; display: flex; align-items: center; background: transparent; transition: background .3s ease, box-shadow .3s ease; }
+    .nav.scrolled, .nav[data-menu-open="true"] { background: var(--white); box-shadow: 0 1px 0 rgba(0,0,0,.08); }
+    .nav-inner { max-width: var(--max-w); margin: 0 auto; padding: 0 var(--pad); width: 100%; display: flex; align-items: center; gap: 40px; }
+    .nav-brand { font-family: var(--font-sans); font-weight: 700; font-size: 20px; letter-spacing: 4px; text-transform: uppercase; color: var(--white); flex-shrink: 0; transition: color .3s ease; text-shadow: 0 1px 8px rgba(0,0,0,.2); }
+    .nav.scrolled .nav-brand, .nav[data-menu-open="true"] .nav-brand { color: var(--on-surface); text-shadow: none; }
+    .nav-links { display: flex; gap: 8px; list-style: none; flex: 1; justify-content: center; }
+    .nav-links a { font-size: 15px; font-weight: 600; color: var(--white); padding: 8px 16px; border-radius: 100px; transition: background .2s, color .3s; }
+    .nav-links a:hover { background: rgba(255,255,255,.15); }
+    .nav.scrolled .nav-links a, .nav[data-menu-open="true"] .nav-links a { color: var(--on-surface); }
+    .nav.scrolled .nav-links a:hover, .nav[data-menu-open="true"] .nav-links a:hover { background: var(--surface-low); }
+    .nav-cta { font-size: 14px; font-weight: 600; padding: 10px 24px; border-radius: 100px; background: transparent; color: var(--white); box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.7); transition: background .2s, color .3s, box-shadow .3s; flex-shrink: 0; }
+    .nav-cta:hover { background: rgba(255,255,255,.15); box-shadow: inset 0 0 0 1.5px var(--white); }
+    .nav.scrolled .nav-cta, .nav[data-menu-open="true"] .nav-cta { color: var(--on-surface); box-shadow: inset 0 0 0 2px var(--primary); }
+    .nav.scrolled .nav-cta:hover, .nav[data-menu-open="true"] .nav-cta:hover { background: var(--surface-low); }
+    .nav-mobile-toggle { display: none; background: none; border: none; width: 44px; height: 44px; flex-direction: column; justify-content: center; align-items: center; gap: 5px; cursor: pointer; margin-left: auto; }
+    .nav-mobile-toggle span { display: block; width: 20px; height: 1.5px; background: var(--white); transition: transform .2s, opacity .2s, background .3s; }
+    .nav.scrolled .nav-mobile-toggle span, .nav[data-menu-open="true"] .nav-mobile-toggle span { background: var(--on-surface); }
+    .nav[data-menu-open="true"] .nav-mobile-toggle span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav[data-menu-open="true"] .nav-mobile-toggle span:nth-child(2) { opacity: 0; }
+    .nav[data-menu-open="true"] .nav-mobile-toggle span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-mobile-toggle { display: flex; }
+      .nav[data-menu-open="true"] .nav-links { display: flex; position: absolute; top: var(--nav-h); left: 0; right: 0; background: var(--white); flex-direction: column; gap: 4px; padding: 16px var(--pad) 24px; border-bottom: 1px solid rgba(0,0,0,.06); box-shadow: 0 2px 12px rgba(0,0,0,.04); }
+      .nav[data-menu-open="true"] .nav-cta { display: inline-flex; position: absolute; top: calc(var(--nav-h) + 180px); left: var(--pad); right: var(--pad); justify-content: center; }
+    }
+
+    /* HERO — full-bleed video with overlaid content */
+    .hero { position: relative; min-height: max(680px, 92vh); display: flex; align-items: center; justify-content: center; padding: calc(var(--nav-h) + 48px) 0 88px; overflow: hidden; background: #15120f; color: var(--white); isolation: isolate; }
+    .hero-media { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+    .hero-media .hero-video, .hero-media .hero-fallback { position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translate(-50%, -50%); object-fit: cover; }
+    .hero-media .hero-fallback { display: none; }
+    .hero-scrim { position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,.25) 35%, rgba(0,0,0,.25) 60%, rgba(0,0,0,.65) 100%); }
+    .hero-content { position: relative; z-index: 2; width: 100%; text-align: center; animation: fadeIn .8s .2s both; }
+    .hero-label { font-size: 14px; font-weight: 600; color: rgba(255,255,255,.85); letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 24px; opacity: 0; animation: fadeUp .6s .3s forwards; }
+    .hero-headline { font-family: var(--font-serif); font-size: clamp(44px, 6.2vw, 76px); line-height: 1.05; letter-spacing: -1px; color: var(--white); max-width: 820px; margin: 0 auto 28px; opacity: 0; animation: fadeUp .6s .5s forwards; text-wrap: balance; text-shadow: 0 2px 24px rgba(0,0,0,.25); }
+    .hero-sub { font-size: clamp(17px, 1.5vw, 20px); line-height: 1.55; color: rgba(255,255,255,.92); max-width: 620px; margin: 0 auto 44px; opacity: 0; animation: fadeUp .6s .7s forwards; text-wrap: pretty; text-shadow: 0 1px 16px rgba(0,0,0,.25); }
+    .hero-actions { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; opacity: 0; animation: fadeUp .6s .9s forwards; }
+    .btn-primary { display: inline-flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 600; padding: 16px 32px; min-height: 48px; border-radius: 100px; background: var(--white); color: var(--on-surface); transition: opacity .2s, transform .2s; cursor: pointer; }
+    .btn-primary:hover { opacity: .92; }
+    .btn-outline { display: inline-flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 600; padding: 16px 32px; min-height: 48px; border-radius: 100px; background: rgba(255,255,255,.06); color: var(--white); box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.6); border: none; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: background .2s, box-shadow .2s; cursor: pointer; }
+    .btn-outline:hover { background: rgba(255,255,255,.14); box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.9); }
+    .btn-primary:focus-visible, .btn-outline:focus-visible { outline: 2px solid var(--white); outline-offset: 3px; }
+    @media (max-width: 768px) {
+      .hero { min-height: max(620px, 88vh); padding: calc(var(--nav-h) + 32px) 0 64px; }
+      .hero-label { letter-spacing: 2px; margin-bottom: 20px; }
+      .hero-headline { margin-bottom: 20px; }
+      .hero-sub { margin-bottom: 32px; }
+      .btn-primary, .btn-outline { padding: 14px 24px; font-size: 15px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-media .hero-video { display: none !important; }
+      .hero-media .hero-fallback { display: block !important; }
+      .hero-content, .hero-label, .hero-headline, .hero-sub, .hero-actions { animation: none !important; opacity: 1 !important; }
+    }
+
+    /* MARQUEE */
+    .marquee-section { border-top: 1px solid rgba(0,0,0,.06); border-bottom: 1px solid rgba(0,0,0,.06); padding: 18px 0; overflow: hidden; background: var(--white); }
+    .marquee-track { display: flex; gap: 56px; animation: marquee 30s linear infinite; width: max-content; }
+    .marquee-item { font-size: 13px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--on-surface-var); white-space: nowrap; display: flex; align-items: center; gap: 12px; }
+    .marquee-item .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* STATS STRIP — research numbers, the page's opening data row */
+    .trust-strip { padding: 72px 0; background: var(--surface); border-bottom: 1px solid rgba(0,0,0,0.04); }
+    .trust-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+    .trust-item { padding: 8px 28px; border-left: 1px solid rgba(0,0,0,0.1); }
+    .trust-item:first-child { border-left: none; padding-left: 0; }
+    .trust-item:last-child { padding-right: 0; }
+    .trust-num { font-family: var(--font-serif); font-size: clamp(40px, 5vw, 60px); line-height: 1; letter-spacing: -1.5px; color: var(--on-surface); margin-bottom: 12px; }
+    .trust-num .unit { font-size: 0.5em; color: var(--accent); margin-left: 2px; letter-spacing: -0.5px; vertical-align: 0.18em; }
+    .trust-claim { font-family: var(--font-sans); font-weight: 600; font-size: 14px; line-height: 1.35; color: var(--on-surface); margin-bottom: 8px; text-wrap: balance; }
+    .trust-source { font-size: 11px; font-weight: 600; letter-spacing: 0.4px; color: var(--on-surface-var); text-transform: uppercase; }
+    @media (max-width: 900px) {
+      .trust-row { grid-template-columns: repeat(2, 1fr); row-gap: 32px; }
+      .trust-item { padding: 0 16px; }
+      .trust-item:nth-child(odd) { border-left: none; padding-left: 0; }
+      .trust-item:nth-child(even) { padding-right: 0; }
+    }
+    @media (max-width: 520px) {
+      .trust-row { grid-template-columns: 1fr; row-gap: 28px; }
+      .trust-item { padding: 0; border-left: none; }
+      .trust-item + .trust-item { padding-top: 28px; border-top: 1px solid rgba(0,0,0,0.08); }
+    }
+
+
+    /* BENTO — feature grid with animated cursor */
+    .bento { padding: var(--section-gap) 0; background: var(--surface); }
+    .bento-header { text-align: center; max-width: 640px; margin: 0 auto 56px; }
+    .bento-eyebrow { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; padding: 6px 14px; border-radius: 100px; background: rgba(212, 165, 116, 0.12); }
+    .bento-headline { font-family: var(--font-serif); font-size: clamp(34px, 4.5vw, 52px); line-height: 1.05; letter-spacing: -0.5px; color: var(--on-surface); margin-bottom: 16px; text-wrap: balance; }
+    .bento-sub { font-size: 17px; color: var(--on-surface-var); line-height: 1.5; }
+
+    .bento-grid { position: relative; display: grid; grid-template-columns: 1.3fr 1.5fr; grid-template-rows: 300px 300px; gap: 16px; }
+    .bento-card { position: relative; display: flex; flex-direction: column; background: var(--white); border: 1px solid rgba(0,0,0,.04); border-radius: 24px; padding: 24px; overflow: hidden; transition: transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s cubic-bezier(.16,1,.3,1); cursor: pointer; }
+    .bento-card:hover, .bento-card.is-active { transform: translateY(-4px); box-shadow: 0 24px 48px rgba(44, 41, 38, .08); border-color: rgba(212, 165, 116, .3); }
+    .bento-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .bento-card--tall { grid-column: 1; grid-row: 1 / 3; }
+    .bento-card[data-demo="visualize"] { grid-column: 2; grid-row: 1; }
+    .bento-card--wide { grid-column: 2; grid-row: 2; }
+
+    .bento-stage { flex: 1; min-height: 0; position: relative; background: var(--surface-low); border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+    .bento-text h3 { font-family: var(--font-sans); font-weight: 700; font-size: 19px; line-height: 1.25; color: var(--on-surface); margin-bottom: 6px; letter-spacing: -0.2px; }
+    .bento-text p { font-size: 14px; line-height: 1.5; color: var(--on-surface-var); }
+
+    /* Animated cursor */
+    .bento-cursor { position: absolute; top: 0; left: 0; width: 24px; height: 24px; pointer-events: none; z-index: 10; opacity: 0; transform: translate(-100px, -100px); transition: transform .9s cubic-bezier(.4, 0, .2, 1), opacity .3s ease; filter: drop-shadow(0 3px 8px rgba(0,0,0,.25)); }
+    .bento-cursor.is-visible { opacity: 1; }
+    .bento-cursor.is-clicking svg { transform: scale(.78); }
+    .bento-cursor svg { width: 100%; height: 100%; transition: transform .12s cubic-bezier(.4, 0, .2, 1); }
+
+    /* ─── Demo: Scan (Card 1) — static phone, reticle fades in, progress fills ─── */
+    .demo-phone { position: relative; width: 150px; height: 260px; border-radius: 28px; background: linear-gradient(180deg, #1a1814, #2c2926); padding: 8px; box-shadow: 0 20px 40px rgba(0,0,0,.2), inset 0 0 0 1px rgba(255,255,255,.06); }
+    .demo-phone-screen { position: relative; width: 100%; height: 100%; border-radius: 22px; background: linear-gradient(135deg, #f5f0e8, #e8dfd1); overflow: hidden; }
+    .demo-phone-notch { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 48px; height: 14px; border-radius: 7px; background: #0a0907; }
+    /* Chair — flat side elevation, 2 tonal steps, confident silhouette */
+    .demo-chair { position: absolute; left: 50%; bottom: 14%; transform: translateX(-50%); width: 94px; height: 110px; background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 120'><path d='M 20 10 Q 20 4 28 4 L 72 4 Q 80 4 80 10 L 80 54 L 20 54 Z' fill='%23b0856b'/><rect x='12' y='52' width='76' height='26' fill='%23c99878'/><path d='M 22 76 L 14 112 L 18 112 L 26 76 Z' fill='%232c2520'/><path d='M 78 76 L 86 112 L 82 112 L 74 76 Z' fill='%232c2520'/></svg>") center/contain no-repeat; }
+
+    /* Progress bar — bottom of phone screen, the sole scan signal */
+    .demo-progress { position: absolute; left: 18px; right: 18px; bottom: 18px; height: 4px; background: rgba(44, 41, 38, .08); border-radius: 2px; overflow: hidden; opacity: 0; transition: opacity .5s ease; }
+    .demo-progress span { display: block; height: 100%; width: 0; background: var(--primary); border-radius: inherit; transition: width .3s linear; }
+    .bento-card[data-demo="scan"].is-active .demo-progress { opacity: 1; }
+    .bento-card[data-demo="scan"].is-active .demo-progress span { width: 100%; transition: width 1.8s cubic-bezier(.4, 0, .2, 1); }
+
+    /* ─── Demo: Visualize (Card 2) — realistic, proportional furniture ─── */
+    /* Real-world scale (roughly): room ≈ 400cm wide × 280cm tall viewport.
+       Sofa 210cm (53%)  ·  Rug 275cm (69%)  ·  Lamp 160cm tall (57%), 40cm base (10%). */
+    .demo-room { position: relative; width: 260px; height: 190px; }
+    .demo-room-floor { position: absolute; inset: 14% 0 0 0; background: linear-gradient(175deg, #d6c6b0 0%, #b8a58a 60%, #a08c72 100%); border-radius: 10px; box-shadow: inset 0 8px 22px rgba(0,0,0,.1), 0 14px 30px rgba(0,0,0,.12); overflow: hidden; }
+    .demo-room-floor::before { content: ''; position: absolute; inset: 22% 0 0 0; background-image: repeating-linear-gradient(90deg, transparent 0 28px, rgba(90, 70, 46, .14) 28px 29px, transparent 29px 56px, rgba(90, 70, 46, .08) 56px 57px); }
+    .demo-room-floor::after { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 22%; background: linear-gradient(180deg, #efe7d8 0%, #dfd3bd 100%); border-bottom: 1px solid rgba(0,0,0,.08); }
+    .demo-room-item { position: absolute; opacity: 0; transform: translateY(-8px); transition: opacity .55s ease, transform .6s cubic-bezier(.22, 1, .36, 1); background-repeat: no-repeat; background-position: center bottom; background-size: contain; }
+
+    /* Rug — flat horizontal stripes, restrained */
+    .demo-room-rug { left: 15.5%; bottom: 4%; width: 69%; height: 22%; transition-delay: 0ms; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60'><rect x='4' y='6' width='192' height='48' fill='%23e8dfca'/><rect x='4' y='14' width='192' height='3' fill='%23b0856b'/><rect x='4' y='28' width='192' height='2' fill='%23b0856b' opacity='.6'/><rect x='4' y='42' width='192' height='3' fill='%23b0856b'/><g stroke='%23b5a88b' stroke-width='.9'><line x1='4' y1='12' x2='1' y2='12'/><line x1='4' y1='22' x2='1' y2='22'/><line x1='4' y1='32' x2='1' y2='32'/><line x1='4' y1='42' x2='1' y2='42'/><line x1='4' y1='52' x2='1' y2='52'/><line x1='196' y1='12' x2='199' y2='12'/><line x1='196' y1='22' x2='199' y2='22'/><line x1='196' y1='32' x2='199' y2='32'/><line x1='196' y1='42' x2='199' y2='42'/><line x1='196' y1='52' x2='199' y2='52'/></g></svg>"); }
+
+    /* Sofa — flat side elevation, 2 tones, one accent pillow, two legs */
+    .demo-room-sofa { left: 23.5%; bottom: 21%; width: 53%; height: 30%; transition-delay: 140ms; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100'><path d='M 10 20 Q 10 14 16 14 L 184 14 Q 190 14 190 20 L 190 76 L 10 76 Z' fill='%237c8c80'/><rect x='18' y='48' width='164' height='28' fill='%235d6e63'/><line x1='73' y1='48' x2='73' y2='76' stroke='%234a5a50' stroke-width='.8'/><line x1='127' y1='48' x2='127' y2='76' stroke='%234a5a50' stroke-width='.8'/><rect x='32' y='22' width='24' height='18' rx='1' fill='%23b0856b'/><rect x='18' y='76' width='3' height='14' fill='%232c2520'/><rect x='179' y='76' width='3' height='14' fill='%232c2520'/></svg>"); }
+
+    /* Floor lamp — flat drum shade, thin stem, disc base */
+    .demo-room-lamp { right: 5%; bottom: 28%; width: 11%; height: 60%; transition-delay: 280ms; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 180'><rect x='10' y='4' width='40' height='40' fill='%23d9c9a0'/><rect x='10' y='4' width='40' height='2' fill='%23a89670'/><rect x='10' y='42' width='40' height='2' fill='%23a89670'/><rect x='29' y='44' width='2' height='108' fill='%231a1612'/><rect x='12' y='150' width='36' height='6' rx='1' fill='%231a1612'/><rect x='16' y='156' width='28' height='3' fill='%231a1612' opacity='.7'/></svg>"); }
+
+    /* Lamp glow — turns on after lamp lands */
+    .demo-lamp-glow { position: absolute; left: 50%; top: 28%; width: 100%; height: 30%; transform: translateX(-50%); background: radial-gradient(ellipse at top, rgba(255, 232, 180, .7) 0%, rgba(255, 210, 130, .32) 35%, transparent 70%); opacity: 0; transition: opacity .8s ease; pointer-events: none; mix-blend-mode: screen; }
+    .bento-card[data-demo="visualize"].is-active .demo-room-item { opacity: 1; transform: translateY(0); }
+    .bento-card[data-demo="visualize"].is-active .demo-lamp-glow { opacity: 1; transition-delay: 900ms; }
+
+    /* ─── Demo: Design / Swap (Card 3) — middle card selects softly, checkmark fades in ─── */
+    .demo-swap { display: flex; gap: 16px; align-items: center; }
+    .demo-swap-card { position: relative; width: 100px; height: 130px; background: var(--white); border: 1px solid rgba(0,0,0,.06); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; transition: transform .55s cubic-bezier(.22, 1, .36, 1), box-shadow .5s ease; }
+    .demo-swap-chip { width: 32px; height: 32px; border-radius: 50%; box-shadow: inset 0 0 0 2px rgba(255,255,255,.6); }
+    .demo-swap-card--a .demo-swap-chip { background: #8a7a66; }
+    .demo-swap-card--b .demo-swap-chip { background: #c99764; }
+    .demo-swap-card--c .demo-swap-chip { background: #4a5d52; }
+    .demo-swap-line { flex: 1; border-radius: 6px; background: var(--surface-low); }
+    .demo-swap-line::before, .demo-swap-line::after { content: ''; display: block; height: 4px; background: var(--surface); border-radius: 2px; margin: 6px 4px; }
+    .demo-swap-line::after { width: 60%; }
+    .demo-swap-card::after { content: ''; position: absolute; top: 6px; right: 6px; width: 20px; height: 20px; border-radius: 50%; background: var(--accent); background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6 9 17l-5-5'/></svg>"); background-size: 14px; background-repeat: no-repeat; background-position: center; opacity: 0; transform: scale(.85); transition: opacity .35s ease, transform .4s cubic-bezier(.22, 1, .36, 1); }
+    .bento-card[data-demo="design"].is-active .demo-swap-card--b { transform: translateY(-6px); box-shadow: 0 20px 32px rgba(0,0,0,.1); z-index: 2; border-color: rgba(212, 165, 116, .5); }
+    .bento-card[data-demo="design"].is-active .demo-swap-card--b::after { opacity: 1; transform: scale(1); }
+
+    /* Bento responsive */
+    @media (max-width: 900px) {
+      .bento-grid { grid-template-columns: 1fr; grid-template-rows: repeat(3, minmax(320px, auto)); gap: 14px; }
+      .bento-card, .bento-card--tall, .bento-card--wide, .bento-card[data-demo="visualize"] { grid-column: 1; grid-row: auto; }
+    }
+    @media (max-width: 640px) {
+      .bento-cursor { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .bento-cursor { display: none; }
+      .bento-card.is-active { transform: none; }
+      .bento-stage *, .demo-phone *, .demo-room *, .demo-checkout *, .demo-swap * { animation: none !important; transition: none !important; }
+    }
+
+
+    /* CTA */
+    .cta-section { padding: var(--section-gap) 0; text-align: center; background: var(--white); }
+    .cta-inner { max-width: 640px; margin: 0 auto; }
+    .cta-headline { font-family: var(--font-sans); font-weight: 700; font-size: clamp(32px, 4.5vw, 52px); line-height: 1.15; margin-bottom: 20px; }
+    .cta-sub { font-size: 17px; line-height: 1.6; color: var(--on-surface-var); margin-bottom: 36px; }
+    .cta-evidence { display: flex; align-items: center; justify-content: center; gap: 32px; margin: 0 auto 36px; padding: 20px 28px; border-radius: 20px; background: var(--surface-warm); max-width: 640px; }
+    .cta-evidence-item { display: flex; align-items: baseline; gap: 10px; text-align: left; }
+    .cta-evidence-num { font-family: var(--font-serif); font-size: 26px; line-height: 1; color: var(--on-surface); letter-spacing: -0.5px; }
+    .cta-evidence-num .unit { color: var(--accent); font-size: 0.72em; }
+    .cta-evidence-label { font-size: 13px; color: var(--on-surface-var); line-height: 1.35; max-width: 180px; }
+    .cta-evidence-label .src { display: block; font-size: 11px; font-weight: 600; letter-spacing: 0.3px; text-transform: uppercase; margin-top: 2px; opacity: 0.75; }
+    .cta-evidence-divider { width: 1px; height: 44px; background: rgba(0,0,0,0.1); flex-shrink: 0; }
+    @media (max-width: 520px) {
+      .cta-evidence { flex-direction: column; gap: 16px; padding: 18px 20px; }
+      .cta-evidence-divider { width: 44px; height: 1px; }
+      .cta-evidence-item { justify-content: center; text-align: center; }
+      .cta-evidence-label { max-width: 100%; }
+    }
+    .cta-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .email-form { display: flex; gap: 8px; max-width: 480px; margin: 0 auto; padding: 6px; border-radius: 100px; background: var(--white); box-shadow: inset 0 0 0 2px var(--primary); }
+    .email-input { flex: 1; min-width: 0; border: none; outline: none; background: transparent; font-family: inherit; font-size: 16px; color: var(--on-surface); padding: 10px 18px; }
+    .email-input::placeholder { color: var(--on-surface-var); }
+    .email-form .btn-primary { padding: 12px 24px; flex-shrink: 0; }
+    .email-note { font-size: 13px; color: var(--on-surface-var); margin-top: 16px; }
+    .email-success { font-size: 15px; font-weight: 600; color: var(--on-surface); margin: 0 auto; max-width: 480px; padding: 18px 24px; border-radius: 100px; background: var(--surface-warm); box-shadow: inset 0 0 0 2px var(--accent); }
+    @media (max-width: 480px) {
+      .email-form { flex-direction: column; border-radius: 20px; padding: 8px; }
+      .email-form .btn-primary { justify-content: center; }
+    }
+    .store-badges { display: flex; justify-content: center; gap: 16px; margin-top: 32px; }
+    .store-badge { display: flex; align-items: center; gap: 10px; padding: 12px 20px; border-radius: 16px; background: var(--surface-warm); transition: background .2s; }
+    .store-badge:hover { background: var(--surface-low); }
+    .store-badge svg { width: 24px; height: 24px; color: var(--on-surface); }
+    .store-badge-text { text-align: left; }
+    .store-badge-label { font-size: 10px; color: var(--on-surface-var); line-height: 1; }
+    .store-badge-store { font-size: 15px; font-weight: 600; line-height: 1.2; }
+
+    /* FOOTER */
+    .footer { background: var(--surface-warm); border-top: 1px solid rgba(0,0,0,.06); padding: 80px 0 40px; }
+    .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 64px; }
+    .footer-brand-text { font-family: var(--font-sans); font-weight: 700; font-size: 20px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 16px; }
+    .footer-desc { font-size: 14px; line-height: 1.6; color: var(--on-surface-var); max-width: 300px; }
+    .footer-col-title { font-size: 14px; font-weight: 700; color: var(--on-surface); margin-bottom: 16px; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-size: 14px; color: var(--on-surface-var); transition: color .2s; }
+    .footer-links a:hover { color: var(--on-surface); }
+    .footer-bar { display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid rgba(0,0,0,.06); }
+    .footer-legal { font-size: 12px; color: var(--on-surface-var); }
+    .footer-socials { display: flex; gap: 24px; }
+    .footer-socials a { font-size: 12px; color: var(--on-surface-var); transition: color .2s; }
+    .footer-socials a:hover { color: var(--on-surface); }
+    @media (max-width: 768px) {
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .footer-bar { flex-direction: column; gap: 16px; }
+    }
+    @media (max-width: 480px) { .footer-top { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-brand">REVO</a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#features">How it works</a></li>
+        <li><a href="#download">Download</a></li>
+      </ul>
+      <a href="#download" class="nav-cta">Get the app</a>
+      <button class="nav-mobile-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-links" id="nav-toggle" type="button">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-media" aria-hidden="true">
+      <video class="hero-video" autoplay muted loop playsinline preload="metadata"
+             poster="https://images.pexels.com/videos/7578540/pictures/preview-0.jpg">
+        <source src="https://res.cloudinary.com/dslnturnw/video/upload/v1777057675/7578540-hd_1280_720_30fps_zdmcgj.mp4" type="video/mp4" />
+      </video>
+      <img class="hero-fallback" src="https://images.pexels.com/videos/7578540/pictures/preview-0.jpg" alt="" decoding="async" />
+      <div class="hero-scrim"></div>
+    </div>
+    <div class="hero-content">
+      <div class="container">
+        <div class="hero-label">Spatial Renovation Marketplace</div>
+        <h1 class="hero-headline">Shop furniture that actually fits.</h1>
+        <p class="hero-sub">Scan any piece with your phone, drop it into a 3D replica of your room, and buy with total confidence &mdash; before you ever hit checkout.</p>
+        <div class="hero-actions">
+          <a href="#download" class="btn-primary">
+            Get early access
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a href="#features" class="btn-outline">See how it works</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-section">
+    <div class="marquee-track">
+      <span class="marquee-item"><span class="dot"></span>3D Scanning</span>
+      <span class="marquee-item"><span class="dot"></span>Room Visualization</span>
+      <span class="marquee-item"><span class="dot"></span>3D Placement</span>
+      <span class="marquee-item"><span class="dot"></span>Furniture Marketplace</span>
+      <span class="marquee-item"><span class="dot"></span>Secure Payments</span>
+      <span class="marquee-item"><span class="dot"></span>Photogrammetry Pipeline</span>
+      <span class="marquee-item"><span class="dot"></span>Virtual Room Builder</span>
+      <span class="marquee-item"><span class="dot"></span>Buy &amp; Sell</span>
+      <span class="marquee-item"><span class="dot"></span>3D Scanning</span>
+      <span class="marquee-item"><span class="dot"></span>Room Visualization</span>
+      <span class="marquee-item"><span class="dot"></span>3D Placement</span>
+      <span class="marquee-item"><span class="dot"></span>Furniture Marketplace</span>
+      <span class="marquee-item"><span class="dot"></span>Secure Payments</span>
+      <span class="marquee-item"><span class="dot"></span>Photogrammetry Pipeline</span>
+      <span class="marquee-item"><span class="dot"></span>Virtual Room Builder</span>
+      <span class="marquee-item"><span class="dot"></span>Buy &amp; Sell</span>
+    </div>
+  </div>
+
+  <!-- COMMITMENTS — product promises -->
+  <section class="trust-strip">
+    <div class="container">
+      <div class="trust-row reveal">
+        <div class="trust-item">
+          <div class="trust-num">$200<span class="unit">B</span></div>
+          <div class="trust-claim">U.S. furniture market &mdash; still sold from photos.</div>
+          <div class="trust-source">Grand View &middot; IMARC</div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-num">86<span class="unit">%</span></div>
+          <div class="trust-claim">of furniture carts are abandoned &mdash; worst of any category.</div>
+          <div class="trust-source">ECDB 2024 &middot; Salesforce</div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-num">77<span class="unit">%</span></div>
+          <div class="trust-claim">of shoppers want 3D or AR before they buy furniture.</div>
+          <div class="trust-source">IPSOS / Threekit</div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-num">$890<span class="unit">B</span></div>
+          <div class="trust-claim">returned to U.S. retailers in 2024. "Doesn't fit" is #1.</div>
+          <div class="trust-source">NRF &middot; Happy Returns</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENTO FEATURES — with animated cursor -->
+  <section class="bento" id="features">
+    <div class="container">
+      <div class="bento-header">
+        <div class="bento-eyebrow">How REVO works</div>
+        <h2 class="bento-headline">From your phone to your living room.</h2>
+        <p class="bento-sub">Scan, design, and buy &mdash; without leaving the app.</p>
+      </div>
+
+      <div class="bento-grid" id="bento-grid">
+        <!-- Card 1 · Scan (tall, left) -->
+        <article class="bento-card bento-card--tall" data-demo="scan" tabindex="0" aria-label="Scan any piece with your phone">
+          <div class="bento-stage">
+            <div class="demo-phone">
+              <div class="demo-phone-screen">
+                <div class="demo-chair" aria-hidden="true"></div>
+                <div class="demo-progress" aria-hidden="true"><span></span></div>
+              </div>
+              <div class="demo-phone-notch" aria-hidden="true"></div>
+            </div>
+          </div>
+          <div class="bento-text">
+            <h3>Scan in seconds</h3>
+            <p>Walk around any piece. Photogrammetry does the rest — 3D model ready in minutes.</p>
+          </div>
+        </article>
+
+        <!-- Card 2 · Visualize -->
+        <article class="bento-card" data-demo="visualize" tabindex="0" aria-label="Visualize true-to-scale">
+          <div class="bento-stage">
+            <div class="demo-room">
+              <div class="demo-room-floor" aria-hidden="true"></div>
+              <div class="demo-room-item demo-room-rug" aria-hidden="true"></div>
+              <div class="demo-room-item demo-room-sofa" aria-hidden="true"></div>
+              <div class="demo-room-item demo-room-lamp" aria-hidden="true">
+                <div class="demo-lamp-glow" aria-hidden="true"></div>
+              </div>
+            </div>
+          </div>
+          <div class="bento-text">
+            <h3>True-to-scale</h3>
+            <p>Every dimension dead-on. See exactly how it fits before you buy.</p>
+          </div>
+        </article>
+
+        <!-- Card 3 · Design (wide, bottom) -->
+        <article class="bento-card bento-card--wide" data-demo="design" tabindex="0" aria-label="Design and swap pieces">
+          <div class="bento-stage">
+            <div class="demo-swap">
+              <div class="demo-swap-card demo-swap-card--a" aria-hidden="true">
+                <div class="demo-swap-chip"></div>
+                <div class="demo-swap-line"></div>
+              </div>
+              <div class="demo-swap-card demo-swap-card--b" aria-hidden="true">
+                <div class="demo-swap-chip"></div>
+                <div class="demo-swap-line"></div>
+              </div>
+              <div class="demo-swap-card demo-swap-card--c" aria-hidden="true">
+                <div class="demo-swap-chip"></div>
+                <div class="demo-swap-line"></div>
+              </div>
+            </div>
+          </div>
+          <div class="bento-text">
+            <h3>Design, then decide</h3>
+            <p>Swap pieces, change styles, save layouts — all before you commit a dollar.</p>
+          </div>
+        </article>
+
+        <!-- Animated cursor (positioned by JS) -->
+        <div class="bento-cursor" id="bento-cursor" aria-hidden="true">
+          <svg viewBox="0 0 28 28"><path d="M6 4l16 10-7 2-3 8z" fill="var(--on-surface)" stroke="white" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="download">
+    <div class="container">
+      <div class="cta-inner reveal">
+        <h2 class="cta-headline">See your space before you shop</h2>
+        <p class="cta-sub">REVO is free to scan, free to explore, and built for anyone who wants to furnish their home with confidence.</p>
+        <div class="cta-evidence">
+          <div class="cta-evidence-item">
+            <span class="cta-evidence-num">+94<span class="unit">%</span></span>
+            <span class="cta-evidence-label">Conversion lift when 3D is on. <span class="src">Shopify</span></span>
+          </div>
+          <div class="cta-evidence-divider" aria-hidden="true"></div>
+          <div class="cta-evidence-item">
+            <span class="cta-evidence-num">&minus;40<span class="unit">%</span></span>
+            <span class="cta-evidence-label">Fewer returns when buyers can preview. <span class="src">Vertebrae &middot; Snap</span></span>
+          </div>
+        </div>
+        <form class="email-form" id="waitlist-form" novalidate>
+          <input type="email" class="email-input" name="email" placeholder="Enter your email" aria-label="Email address" required autocomplete="email" />
+          <button type="submit" class="btn-primary">
+            Join the waitlist
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+        </form>
+        <p class="email-success" id="waitlist-success" hidden>You're on the list. We'll be in touch when REVO goes live.</p>
+        <p class="email-note">Free to scan, free to browse. Launching soon on iOS + Android.</p>
+        <div class="store-badges">
+          <a href="#" class="store-badge">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            <div class="store-badge-text">
+              <div class="store-badge-label">Download on the</div>
+              <div class="store-badge-store">App Store</div>
+            </div>
+          </a>
+          <a href="#" class="store-badge">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.199l2.302 2.302-2.302 2.302L15.396 12l2.302-2.302v-.19zM5.864 3.469L16.8 9.802l-2.302 2.302L5.864 3.47z"/></svg>
+            <div class="store-badge-text">
+              <div class="store-badge-label">Get it on</div>
+              <div class="store-badge-store">Google Play</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div>
+          <div class="footer-brand-text">REVO</div>
+          <p class="footer-desc">The spatial renovation marketplace. Scan, design, and shop — all in one place.</p>
+        </div>
+        <div>
+          <div class="footer-col-title">Product</div>
+          <ul class="footer-links">
+            <li><a href="#features">How it works</a></li>
+            <li><a href="#download">Download</a></li>
+            <li><a href="#">Pricing</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">Company</div>
+          <ul class="footer-links">
+            <li><a href="#">About</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Press</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">Legal</div>
+          <ul class="footer-links">
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bar">
+        <div class="footer-legal">&copy; 2026 REVO. All rights reserved.</div>
+        <div class="footer-socials">
+          <a href="#">Instagram</a>
+          <a href="#">Twitter</a>
+          <a href="#">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 10); });
+
+    // Mobile nav toggle
+    const navToggle = document.getElementById('nav-toggle');
+    if (navToggle) {
+      const closeMenu = () => {
+        nav.setAttribute('data-menu-open', 'false');
+        navToggle.setAttribute('aria-expanded', 'false');
+      };
+      navToggle.addEventListener('click', () => {
+        const open = nav.getAttribute('data-menu-open') === 'true';
+        nav.setAttribute('data-menu-open', String(!open));
+        navToggle.setAttribute('aria-expanded', String(!open));
+      });
+      // Close on link tap and on Escape
+      document.querySelectorAll('#nav-links a, .nav-cta').forEach((a) => {
+        a.addEventListener('click', closeMenu);
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeMenu();
+      });
+    }
+    const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(el => observer.observe(el));
+
+    // Bento cursor choreography — auto-demoes each card in sequence
+    (function initBento() {
+      const grid = document.getElementById('bento-grid');
+      const cursor = document.getElementById('bento-cursor');
+      if (!grid || !cursor) return;
+
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const smallScreen = window.matchMedia('(max-width: 640px)').matches;
+      if (reduceMotion || smallScreen) return;
+
+      const cards = Array.from(grid.querySelectorAll('.bento-card'));
+      const ORDER = ['scan', 'visualize', 'design'];
+      let i = 0;
+      let timer = null;
+      let started = false;
+      let hovering = false;
+
+      const moveCursor = (card) => {
+        const gridRect = grid.getBoundingClientRect();
+        const stage = card.querySelector('.bento-stage');
+        const r = stage.getBoundingClientRect();
+        const x = r.left - gridRect.left + r.width / 2 - 12;
+        const y = r.top - gridRect.top + r.height / 2 - 12;
+        cursor.style.transform = `translate(${x}px, ${y}px)`;
+        cursor.classList.add('is-visible');
+      };
+
+      const clickCard = (card) => {
+        cursor.classList.add('is-clicking');
+        card.classList.add('is-active');
+        setTimeout(() => cursor.classList.remove('is-clicking'), 180);
+      };
+
+      const step = () => {
+        if (hovering) return;
+        cards.forEach((c) => c.classList.remove('is-active'));
+        const demo = ORDER[i % ORDER.length];
+        const card = cards.find((c) => c.dataset.demo === demo);
+        if (!card) return;
+        moveCursor(card);
+        setTimeout(() => clickCard(card), 900);
+        i++;
+      };
+
+      const start = () => {
+        if (started) return;
+        started = true;
+        setTimeout(() => { step(); timer = setInterval(step, 2800); }, 400);
+      };
+
+      // Pause when user interacts with any card
+      cards.forEach((card) => {
+        card.addEventListener('pointerenter', () => {
+          hovering = true;
+          cursor.classList.remove('is-visible');
+          cards.forEach((c) => c.classList.remove('is-active'));
+          card.classList.add('is-active');
+        });
+        card.addEventListener('pointerleave', () => {
+          hovering = false;
+          card.classList.remove('is-active');
+        });
+        card.addEventListener('focus', () => {
+          hovering = true;
+          cursor.classList.remove('is-visible');
+          cards.forEach((c) => c.classList.remove('is-active'));
+          card.classList.add('is-active');
+        });
+        card.addEventListener('blur', () => {
+          hovering = false;
+          card.classList.remove('is-active');
+        });
+      });
+
+      // Start when the section scrolls into view
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { start(); io.disconnect(); }
+        });
+      }, { threshold: 0.25 });
+      io.observe(grid);
+
+      // Re-calculate position on resize
+      window.addEventListener('resize', () => {
+        if (!started || hovering) return;
+        const active = cards.find((c) => c.classList.contains('is-active'));
+        if (active) moveCursor(active);
+      });
+    })();
+
+    const waitlist = document.getElementById('waitlist-form');
+    if (waitlist) {
+      waitlist.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = waitlist.email.value.trim();
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          waitlist.email.focus();
+          return;
+        }
+        const btn = waitlist.querySelector('button');
+        btn.disabled = true;
+        btn.style.opacity = '.6';
+        try {
+          const res = await fetch('/api/waitlist', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, source: 'landing' })
+          });
+          if (!res.ok) throw new Error('Request failed: ' + res.status);
+          waitlist.hidden = true;
+          document.getElementById('waitlist-success').hidden = false;
+        } catch (err) {
+          btn.disabled = false;
+          btn.style.opacity = '';
+          const note = document.querySelector('.email-note');
+          if (note) {
+            note.textContent = "Something went wrong — please try again in a moment.";
+            note.style.color = 'var(--accent)';
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
