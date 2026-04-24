@@ -554,13 +554,31 @@
     const nav = document.getElementById('nav');
     window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 10); });
 
-    // Fade hero video in only once it's actually playing to avoid a grainy/frozen first frame
+    // Fade hero video in only once it's buffered enough to render a clean frame.
+    // Using `playing` alone fires too early — you see the first raw decode passes as "grain".
+    // Wait for canplaythrough (enough buffer to play without stalling) AND a real painted frame.
     const heroVideo = document.getElementById('hero-video');
     if (heroVideo) {
-      const revealVideo = () => heroVideo.classList.add('is-ready');
-      if (heroVideo.readyState >= 3 && !heroVideo.paused) revealVideo();
-      heroVideo.addEventListener('playing', revealVideo, { once: true });
-      heroVideo.addEventListener('canplaythrough', revealVideo, { once: true });
+      let revealed = false;
+      const reveal = () => {
+        if (revealed) return;
+        revealed = true;
+        heroVideo.classList.add('is-ready');
+      };
+      const revealOnFrame = () => {
+        if ('requestVideoFrameCallback' in HTMLVideoElement.prototype) {
+          heroVideo.requestVideoFrameCallback(() => reveal());
+        } else {
+          reveal();
+        }
+      };
+      if (heroVideo.readyState >= 4) {
+        revealOnFrame();
+      } else {
+        heroVideo.addEventListener('canplaythrough', revealOnFrame, { once: true });
+      }
+      // Safety net so the video never stays hidden if events misfire
+      setTimeout(reveal, 4000);
     }
 
     // Mobile nav toggle
