@@ -117,9 +117,11 @@
     .btn-outline:hover { background: rgba(255,255,255,.14); box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.9); }
     .btn-primary:focus-visible, .btn-outline:focus-visible { outline: 2px solid var(--white); outline-offset: 3px; }
     @media (max-width: 768px) {
+      .hero { min-height: 92vh; min-height: 92dvh; height: auto; padding: calc(var(--nav-h) + 18px) 0 28px; }
+      .hero-content { padding: 0 16px; }
       .hero-label { letter-spacing: 2px; margin-bottom: 20px; }
-      .hero-headline { margin-bottom: 20px; }
-      .hero-sub { margin-bottom: 32px; }
+      .hero-headline { font-size: clamp(34px, 8.4vw, 44px); line-height: 1.06; margin-bottom: 16px; max-width: 14ch; }
+      .hero-sub { font-size: 15px; line-height: 1.5; margin-bottom: 24px; max-width: 34ch; }
       .btn-primary, .btn-outline { padding: 14px 24px; font-size: 15px; }
       .hero-actions { width: 100%; }
       .hero-actions .btn-primary, .hero-actions .btn-outline { flex: 1 1 auto; justify-content: center; }
@@ -140,7 +142,7 @@
 
     /* STATS STRIP — research numbers, the page's opening data row */
     /* EXPLAINER — "What is REVO?" brand mental-model section */
-    .explainer { padding: clamp(96px, 13vw, 168px) 0 clamp(96px, 13vw, 168px); background: var(--surface-warm); }
+    .explainer { padding: clamp(24px, 3vw, 40px) 0 clamp(28px, 4vw, 48px); background: var(--surface-warm); }
     .explainer-inner { max-width: 1080px; margin: 0 auto; text-align: center; }
     .explainer-eyebrow { display: inline-flex; align-items: center; gap: 14px; font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin: 0 0 24px; }
     .explainer-eyebrow::before { content: ''; width: 10px; height: 10px; border-radius: 0; background: currentColor; flex-shrink: 0; }
@@ -157,7 +159,8 @@
     .explainer-anchor strong { color: var(--on-surface); font-weight: 600; }
     @media (max-width: 900px) {
       .explainer-flow { grid-template-columns: 1fr; gap: 16px; }
-      .explainer-arrow { transform: rotate(90deg); justify-self: center; }
+      .explainer-arrow { transform: rotate(90deg); justify-self: center; display: flex; align-items: center; justify-content: center; padding: 6px 0; }
+      .explainer-arrow svg { width: 20px; height: 20px; }
     }
 
     .trust-strip { padding: clamp(96px, 12vw, 144px) 0 clamp(96px, 12vw, 144px); background: var(--surface); }
@@ -183,7 +186,7 @@
 
 
     /* BENTO — feature grid with animated cursor */
-    .bento { padding: clamp(112px, 14vw, 168px) 0 clamp(120px, 16vw, 200px); background: var(--surface-low); }
+    .bento { padding: clamp(96px, 13vw, 148px) 0 clamp(108px, 15vw, 176px); background: var(--surface-low); }
     .bento-header { text-align: center; max-width: 640px; margin: 0 auto clamp(40px, 5vw, 56px); }
     .bento-eyebrow { display: inline-flex; align-items: center; gap: 14px; font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
     .bento-eyebrow::before { content: ''; width: 10px; height: 10px; border-radius: 0; background: currentColor; flex-shrink: 0; }
@@ -260,8 +263,12 @@
 
     /* Bento responsive */
     @media (max-width: 900px) {
-      .bento-grid { grid-template-columns: 1fr; grid-template-rows: repeat(3, minmax(320px, auto)); gap: 14px; }
+      .bento-grid { grid-template-columns: 1fr; grid-template-rows: repeat(3, minmax(380px, auto)); gap: 16px; }
       .bento-card, .bento-card--tall, .bento-card--wide, .bento-card[data-demo="visualize"] { grid-column: 1; grid-row: auto; }
+      .bento-card { padding: 26px 24px; }
+      .bento-stage { margin-bottom: 20px; min-height: 210px; }
+      .bento-text h3 { font-size: 19px; }
+      .bento-text p { font-size: 15px; line-height: 1.58; }
     }
     @media (max-width: 640px) {
       .bento-cursor { display: none; }
@@ -305,21 +312,21 @@
     .problem-table-head { display: grid; grid-template-columns: 1fr minmax(280px, 36ch); gap: clamp(32px, 5vw, 64px); align-items: end; margin-bottom: clamp(40px, 5vw, 64px); }
     .problem-table-title { font-family: var(--font-serif); font-size: clamp(30px, 3.6vw, 44px); line-height: 1.1; color: var(--white); margin: 0; letter-spacing: -0.5px; max-width: 18ch; text-wrap: balance; }
     .problem-table-note { font-size: 14px; line-height: 1.55; color: rgba(255,255,255,.62); margin: 0; text-align: left; }
-    .problem-table { width: 100%; border-collapse: collapse; border: 1px solid #000; border-radius: 0; table-layout: fixed; }
+    .problem-table { width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #000; border-radius: 0; table-layout: fixed; }
     .problem-table colgroup col:nth-child(1) { width: 28%; }
     .problem-table colgroup col:nth-child(2) { width: 18%; }
     .problem-table colgroup col:nth-child(3) { width: 22%; }
     .problem-table colgroup col:nth-child(4) { width: 32%; }
-    .problem-table th, .problem-table td { padding: clamp(22px, 2.2vw, 32px) clamp(18px, 2vw, 28px); text-align: left; border-right: 1px solid #000; border-bottom: 1px solid #000; vertical-align: middle; }
+    .problem-table th, .problem-table td { padding: clamp(24px, 2.4vw, 34px) clamp(20px, 2.2vw, 30px); text-align: left; border-right: 1px solid #000; border-bottom: 1px solid #000; vertical-align: top; }
     .problem-table th:last-child, .problem-table td:last-child { border-right: none; }
     .problem-table tr:last-child td { border-bottom: none; }
     .problem-table tbody tr { transition: background .25s ease; }
     .problem-table tbody tr:hover { background: rgba(212,165,116,.05); }
     .problem-table thead th { font-family: var(--font-sans); font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); background: rgba(255,255,255,.03); padding-top: 20px; padding-bottom: 20px; }
-    .problem-table tbody td { font-size: 16px; line-height: 1.4; color: rgba(255,255,255,.82); }
+    .problem-table tbody td { font-size: 16px; line-height: 1.5; color: rgba(255,255,255,.82); }
     .problem-table tbody td:first-child { font-weight: 600; color: var(--white); font-size: 17px; letter-spacing: -0.2px; }
     .problem-table .pt-baseline { color: rgba(255,255,255,.5); font-size: 15px; font-variant-numeric: tabular-nums; }
-    .problem-table .pt-better { font-family: var(--font-serif); color: var(--accent); font-size: clamp(26px, 3vw, 36px); letter-spacing: -0.4px; line-height: 1; font-variant-numeric: tabular-nums; }
+    .problem-table .pt-better { font-family: var(--font-serif); color: var(--accent); font-size: clamp(26px, 3vw, 36px); letter-spacing: -0.4px; line-height: 1.15; font-variant-numeric: tabular-nums; }
     .problem-table .pt-delta { font-size: 14px; line-height: 1.5; color: rgba(255,255,255,.62); }
 
     @media (max-width: 900px) {
@@ -333,11 +340,11 @@
       .problem-table colgroup col:nth-child(4) { width: 24%; }
     }
     @media (max-width: 720px) {
-      .problem-table th, .problem-table td { padding: 18px 14px; }
+      .problem-table th, .problem-table td { padding: 16px 12px; }
       .problem-table thead th { font-size: 11px; letter-spacing: 1.4px; }
-      .problem-table tbody td { font-size: 15px; }
-      .problem-table tbody td:first-child { font-size: 16px; }
-      .problem-table .pt-better { font-size: 22px; }
+      .problem-table tbody td { font-size: 14px; line-height: 1.45; }
+      .problem-table tbody td:first-child { font-size: 15px; }
+      .problem-table .pt-better { font-size: 20px; line-height: 1.12; }
       .problem-table .pt-delta { display: none; }
       .problem-table th:last-child, .problem-table td:last-child { display: none; }
       .problem-table colgroup col:nth-child(1) { width: 50%; }
@@ -376,10 +383,8 @@
     .cta-break-visual-main::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.05) 0%, rgba(0,0,0,.2) 100%); pointer-events: none; }
 
     /* CTA pillars — three-promise row below the CTA, sharp-cornered hairline grid */
-    .cta-break-pillars { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: clamp(96px, 12vw, 144px); padding-top: clamp(56px, 7vw, 80px); border-top: 1px solid rgba(245,244,240,.14); text-align: left; }
-    .cta-break-pillar { display: flex; align-items: flex-start; gap: 18px; padding: 0 clamp(20px, 2.4vw, 36px); border-right: 1px solid rgba(245,244,240,.1); }
-    .cta-break-pillar:first-child { padding-left: 0; }
-    .cta-break-pillar:last-child { padding-right: 0; border-right: none; }
+    .cta-break-pillars { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: clamp(96px, 12vw, 144px); padding-top: clamp(56px, 7vw, 80px); border-top: 1px solid rgba(245,244,240,.14); text-align: left; }
+    .cta-break-pillar { display: flex; align-items: flex-start; gap: 16px; min-height: 100%; padding: 18px 16px; border: 1px solid rgba(245,244,240,.12); background: rgba(245,244,240,.03); }
     .cta-break-pillar-icon { width: 30px; height: 30px; color: var(--accent); flex-shrink: 0; margin-top: 2px; }
     .cta-break-pillar-text { display: flex; flex-direction: column; gap: 6px; }
     .cta-break-pillar-title { font-family: var(--font-sans); font-weight: 700; font-size: 17px; color: #F5F4F0; margin: 0; letter-spacing: -0.2px; }
@@ -396,9 +401,8 @@
     }
     @media (max-width: 720px) {
       .cta-break-visual-main { min-height: 320px; }
-      .cta-break-pillars { grid-template-columns: 1fr; padding-top: 40px; margin-top: 64px; }
-      .cta-break-pillar { padding: 0 0 24px; border-right: none; border-bottom: 1px solid rgba(245,244,240,.1); }
-      .cta-break-pillar:last-child { padding-bottom: 0; border-bottom: none; }
+      .cta-break-pillars { grid-template-columns: 1fr; padding-top: 40px; margin-top: 64px; gap: 12px; }
+      .cta-break-pillar { padding: 16px 14px; }
     }
 
     /* PERSONAS — "Built for everyone" four-card grid showing who REVO is for */
