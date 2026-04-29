@@ -845,7 +845,7 @@
             <div class="cta-break-actions reveal">
               <a href="#download" class="cta-break-primary">
                 Get early access
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </a>
               <a href="#features" class="cta-break-secondary">See how it works</a>
             </div>
@@ -858,9 +858,12 @@
           </div>
         </div>
         <div class="cta-break-pillars reveal-stagger">
-          <div class="cta-break-pillar"><svg class="cta-break-pillar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><div class="cta-break-pillar-text"><p class="cta-break-pillar-title">No subscription</p><p class="cta-break-pillar-body">Free to scan and visualize. Sellers pay only when a piece sells.</p></div></div>
-          <div class="cta-break-pillar"><svg class="cta-break-pillar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg><div class="cta-break-pillar-text"><p class="cta-break-pillar-title">Privacy-first</p><p class="cta-break-pillar-body">Your room scans stay on your device until you choose to list or share.</p></div></div>
-          <div class="cta-break-pillar"><svg class="cta-break-pillar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg><div class="cta-break-pillar-text"><p class="cta-break-pillar-title">Phone-only</p><p class="cta-break-pillar-body">No headset, no studio kit. The phone in your pocket is the whole rig.</p></div></div>
+          <div class="cta-break-pillar"><svg class="cta-break-pillar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <div class="cta-break-pillar-text"><p class="cta-break-pillar-title">No subscription</p><p class="cta-break-pillar-body">Free to scan and visualize. Sellers pay only when a piece sells.</p></div></div>
+          <div class="cta-break-pillar"><svg class="cta-break-pillar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+          <div class="cta-break-pillar-text"><p class="cta-break-pillar-title">Privacy-first</p><p class="cta-break-pillar-body">Your room scans stay on your device until you choose to list or share.</p></div></div>
+          <div class="cta-break-pillar"><svg class="cta-break-pillar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg>
+          <div class="cta-break-pillar-text"><p class="cta-break-pillar-title">Phone-only</p><p class="cta-break-pillar-body">No headset, no studio kit. The phone in your pocket is the whole rig.</p></div></div>
         </div>
       </div>
     </div>
@@ -1476,12 +1479,22 @@
 
     const waitlist = document.getElementById('waitlist-form');
     if (waitlist) {
+      const successMessage = document.getElementById('waitlist-success');
+      const note = document.querySelector('.email-note');
       waitlist.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = waitlist.email.value.trim();
         if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
           waitlist.email.focus();
+          if (note) {
+            note.textContent = "Please enter a valid email address.";
+            note.style.color = 'var(--accent)';
+          }
           return;
+        }
+        if (note) {
+          note.textContent = '';
+          note.style.color = '';
         }
         const btn = waitlist.querySelector('button');
         btn.disabled = true;
@@ -1490,15 +1503,25 @@
           const res = await fetch('/api/waitlist', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, source: 'landing' })
+            body: JSON.stringify({ email })
           });
-          if (!res.ok) throw new Error('Request failed: ' + res.status);
-          waitlist.hidden = true;
-          document.getElementById('waitlist-success').hidden = false;
+
+          if (res.ok) {
+            waitlist.hidden = true;
+            successMessage.hidden = false;
+          } else if (res.status === 409) {
+            btn.disabled = false;
+            btn.style.opacity = '';
+            if (note) {
+              note.textContent = "You're already on the list — we'll be in touch!";
+              note.style.color = 'var(--accent)';
+            }
+          } else {
+            throw new Error('Something went wrong');
+          }
         } catch (err) {
           btn.disabled = false;
           btn.style.opacity = '';
-          const note = document.querySelector('.email-note');
           if (note) {
             note.textContent = "Something went wrong. Please try again.";
             note.style.color = 'var(--accent)';
